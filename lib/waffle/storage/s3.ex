@@ -261,7 +261,7 @@ defmodule Waffle.Storage.S3 do
   end
 
   defp asset_host(definition, file_and_scope) do
-    case definition.asset_host() do
+    case definition.asset_host(file_and_scope) do
       false -> default_host(definition, file_and_scope)
       nil -> default_host(definition, file_and_scope)
       host -> host
@@ -269,9 +269,11 @@ defmodule Waffle.Storage.S3 do
   end
 
   defp default_host(definition, file_and_scope) do
+    bucket_name = s3_bucket(definition, file_and_scope)
+
     case virtual_host() do
-      true -> "https://#{s3_bucket(definition, file_and_scope)}.s3.amazonaws.com"
-      _ -> "https://s3.amazonaws.com/#{s3_bucket(definition, file_and_scope)}"
+      true -> "https://#{bucket_name}.s3.amazonaws.com"
+      _ -> "https://s3.amazonaws.com/#{bucket_name}"
     end
   end
 
