@@ -9,10 +9,11 @@ defmodule WaffleTest.File do
       Application.put_env(:waffle, :tmp_dir, @custom_tmp_dir)
 
       assert Waffle.File.generate_temporary_path() |> String.starts_with?(@custom_tmp_dir)
-      on_exit fn ->
+
+      on_exit(fn ->
         Application.delete_env(:waffle, :tmp_dir)
         File.rm_rf!(@custom_tmp_dir)
-      end
+      end)
     end
 
     test "uses system tmp_dir" do
